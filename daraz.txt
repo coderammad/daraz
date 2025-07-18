@@ -1,0 +1,32 @@
+import pandas as pd
+import plotly.express as px
+
+print("Data Analysis Daraz Computers/Laptops and Smartphones - Most Rating 2022")
+
+data = pd.read_csv("computer-laptops.csv")
+
+print("\nMissing Values:\n", data.isnull().sum())
+print("\nData Summary:\n", data.describe())
+
+print("\nTop 10 Rated Laptops on Daraz 2022:")
+H_rating_Computers = data.sort_values(by="rating", ascending=False).head(10)
+print(H_rating_Computers['product title'])
+
+# CHECK COLUMNS HERE FIRST
+print("\nColumns in dataset:\n", data.columns)
+
+# Now make sure column 'rating.1' exists before using it
+if 'rating.1' in data.columns and 'product title.1' in data.columns:
+    print("\nTop 10 Rated Smartphones on Daraz 2022:")
+    H_rating_Smartphones = data.sort_values(by="rating.1", ascending=False).head(10)
+    print(H_rating_Smartphones['product title.1'])
+else:
+    print("\n❌ Smartphone rating data not found in the dataset. Please check column names.")
+
+# Plot for laptops
+computers = H_rating_Computers["product title"].value_counts()
+labels = computers.index
+counts = H_rating_Computers["price"][:len(labels)]
+
+figure = px.bar(H_rating_Computers, x=labels, y=counts, title="Prices of Top Rated Laptops on Daraz 2022")
+figure.show()
